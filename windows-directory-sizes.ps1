@@ -1,11 +1,12 @@
 # windows explorer can probably display sum of size of files in a folder
 # but instead of figuring out how, i wasted time making powershell do it
 
-$targetFolders = Get-ChildItem -Path "C:\Program Files (x86)\Steam\steamapps\common\" -ErrorAction SilentlyContinue
+$targetRoot = "C:\Users\Chris\Downloads\"
+$targetFolders = Get-ChildItem -Path $targetRoot -ErrorAction SilentlyContinue
 $csvStrings = New-Object -TypeName 'System.Collections.ArrayList'
 
 foreach ($folder in $targetFolders) {
-    $line = "{0},{1}" -f $folder, ((Get-ChildItem "C:\Program Files (x86)\Steam\steamapps\common\$folder" -Recurse | Measure-Object -Property Length -Sum -ErrorAction Stop).Sum / 1GB)
+    $line = "{0},{1}" -f $folder, ((Get-ChildItem "$targetRoot$folder" -Recurse | Measure-Object -Property Length -Sum -ErrorAction Stop).Sum / 1GB)
     $null = $csvStrings.Add($line)
 }
 
